@@ -39,3 +39,4 @@ tmp/
 # Artefatos gerados pelo projeto
 /tmp_pkcs7.der
 scripts/*.log
+tests/samples/pades.pdf
