@@ -100,6 +100,14 @@ composer lint
 composer stan
 ```
 
+#### Sensitive tests
+
+Some tests depend on local sample files and are annotated with the PHPUnit group `sensitive`. These tests are excluded in GitHub CI.
+
+- Run all tests locally: `vendor/bin/phpunit`
+- Run only sensitive tests locally: `vendor/bin/phpunit --group sensitive`
+- CI excludes them via `--exclude-group sensitive` in the workflow.
+
 ---
 
 ## Português (Brasil)

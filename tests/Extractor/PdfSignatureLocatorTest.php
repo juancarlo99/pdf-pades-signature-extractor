@@ -5,6 +5,9 @@ namespace Juancarlo99\PdfPadesSignatureExtractor\Tests\Extractor;
 use PHPUnit\Framework\TestCase;
 use Juancarlo99\PdfPadesSignatureExtractor\Extractor\PdfSignatureLocator;
 
+/**
+ * @group sensitive
+ */
 class PdfSignatureLocatorTest extends TestCase
 {
     public function testItExtractsPkcs7FromSignedPdf(): void
