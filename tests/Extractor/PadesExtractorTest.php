@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 use Juancarlo99\PdfPadesSignatureExtractor\Extractor\PadesExtractor;
 use Juancarlo99\PdfPadesSignatureExtractor\DTO\SignatureData;
 
+/**
+ * @group sensitive
+ */
 class PadesExtractorTest extends TestCase
 {
     public function testItExtractsSignatureData(): void

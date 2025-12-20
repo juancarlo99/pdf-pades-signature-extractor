@@ -7,6 +7,9 @@ use Juancarlo99\PdfPadesSignatureExtractor\Certificate\X509Certificate;
 use Juancarlo99\PdfPadesSignatureExtractor\Extractor\PdfSignatureLocator;
 use Juancarlo99\PdfPadesSignatureExtractor\Extractor\Pkcs7Extractor;
 
+/**
+ * @group sensitive
+ */
 class X509CertificateTest extends TestCase
 {
     public function testParsesCertificate(): void
