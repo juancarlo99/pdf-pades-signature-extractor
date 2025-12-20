@@ -1,0 +1,41 @@
+# Composer (biblioteca)
+vendor/
+composer.lock
+composer.phar
+
+# PHPUnit / cobertura
+.phpunit.cache/
+.phpunit.result.cache
+coverage/
+
+# PHPStan
+.phpstan/
+
+# PHPCS / CS Fixer
+.phpcs-cache
+.php-cs-fixer.cache
+
+# IDE / Editor
+.idea/
+.vscode/
+*.code-workspace
+
+# SO / arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs / temporários
+*.log
+tmp/
+*.tmp
+*.swp
+
+# Docker / env
+.env
+.env.local
+.env.*.local
+.docker/
+
+# Artefatos gerados pelo projeto
+/tmp_pkcs7.der
+scripts/*.log

@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: pades-pdf-lib
+    volumes:
+      - .:/app
+    tty: true
