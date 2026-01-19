@@ -37,8 +37,7 @@ class Pkcs7SignerInfoExtractor
         // Minimal decoding approach: search for SigningTime attribute via decoded BER tree
         // to avoid full CMS mapping complexity. If decoding fails, return null.
         try {
-            $asn1 = new \phpseclib3\File\ASN1();
-            $decoded = $asn1->decodeBER($der);
+            $decoded = \phpseclib3\File\ASN1::decodeBER($der);
             if (!is_array($decoded)) {
                 return null;
             }
@@ -56,6 +55,9 @@ class Pkcs7SignerInfoExtractor
 
     /**
      * Recursively search decoded BER nodes to find SigningTime values.
+     */
+    /**
+     * @param array<string, mixed> $node
      */
     private function findSigningTimeInNode(array $node): ?DateTimeImmutable
     {
@@ -85,6 +87,9 @@ class Pkcs7SignerInfoExtractor
         return null;
     }
 
+    /**
+     * @param array<string, mixed> $node
+     */
     private function getOidFromNode(array $node): ?string
     {
         if (($node['type'] ?? null) === \phpseclib3\File\ASN1::TYPE_OBJECT_IDENTIFIER && isset($node['content'])) {
@@ -94,6 +99,9 @@ class Pkcs7SignerInfoExtractor
         return null;
     }
 
+    /**
+     * @param array<string, mixed> $node
+     */
     private function parseTimeNode(array $node): ?DateTimeImmutable
     {
         if (!isset($node['type'])) {
@@ -103,10 +111,11 @@ class Pkcs7SignerInfoExtractor
         if (!is_string($content)) {
             return null;
         }
-        if ($node['type'] === \phpseclib3\File\ASN1::TYPE_UTCTime) {
+        // UTCTime (tag 0x17) or GeneralizedTime (tag 0x18)
+        if ($node['type'] === 0x17) {
             return $this->parseUtcTime($content);
         }
-        if ($node['type'] === \phpseclib3\File\ASN1::TYPE_GeneralizedTime) {
+        if ($node['type'] === 0x18) {
             return $this->parseGeneralizedTime($content);
         }
         return null;
@@ -157,6 +166,9 @@ class Pkcs7SignerInfoExtractor
     /**
      * Read DER length at given offset, returning [length, bytesConsumed].
      */
+    /**
+     * @return array{0:int,1:int}|null [length, bytesConsumed]
+     */
     private function readDerLength(string $der, int $offset): ?array
     {
         if ($offset >= strlen($der)) {
@@ -186,9 +198,6 @@ class Pkcs7SignerInfoExtractor
         }
         if ($str[$len - 1] === 'Z') {
             $digits = substr($str, 0, $len - 1);
-            if ($digits === false) {
-                return null;
-            }
             $fmt = strlen($digits) === 12 ? 'ymdHiS' : (strlen($digits) === 10 ? 'ymdHi' : null);
             if ($fmt === null) {
                 return null;
@@ -213,11 +222,8 @@ class Pkcs7SignerInfoExtractor
         // With offset
         if ($len >= 14) {
             $offset = substr($str, -5);
-            if ($offset !== false && ($offset[0] === '+' || $offset[0] === '-')) {
+            if ($offset[0] === '+' || $offset[0] === '-') {
                 $digits = substr($str, 0, $len - 5);
-                if ($digits === false) {
-                    return null;
-                }
                 $fmt = strlen($digits) === 12 ? 'ymdHiS' : (strlen($digits) === 10 ? 'ymdHi' : null);
                 if ($fmt === null) {
                     return null;
@@ -253,7 +259,7 @@ class Pkcs7SignerInfoExtractor
         $len = strlen($main);
         if ($main[$len - 1] === 'Z') {
             $digits = substr($main, 0, $len - 1);
-            if ($digits === false || strlen($digits) !== 14) {
+            if (strlen($digits) !== 14) {
                 return null;
             }
             $dt = DateTimeImmutable::createFromFormat('YmdHis\\Z', $digits . 'Z');
@@ -261,9 +267,9 @@ class Pkcs7SignerInfoExtractor
         }
         // With offset
         $offset = substr($main, -5);
-        if ($offset !== false && ($offset[0] === '+' || $offset[0] === '-')) {
+        if ($offset[0] === '+' || $offset[0] === '-') {
             $digits = substr($main, 0, strlen($main) - 5);
-            if ($digits === false || strlen($digits) !== 14) {
+            if (strlen($digits) !== 14) {
                 return null;
             }
             $dt = DateTimeImmutable::createFromFormat('YmdHisO', $digits . $offset);
