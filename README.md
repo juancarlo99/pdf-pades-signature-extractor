@@ -28,6 +28,8 @@ This project was created as a **real-world, production-oriented library**, focus
   - Certificate issuer
   - Certificate validity period
   - Basic signature metadata
+  - Signing date/time (CMS SigningTime, quando disponível)
+  - Cadeia de certificados X.509 (PEM)
 - Built on top of OpenSSL
 - Clean architecture (DTOs, Services, Exceptions)
 - PSR-4 compliant
@@ -146,6 +148,7 @@ Este projeto foi desenvolvido como uma **biblioteca real e prática**, com foco 
 - Validação de carimbo do tempo (TSA)
 - Validação jurídica
 - Verificação de confiabilidade da assinatura
+ - Inferir o "tipo" do certificado (A1/A3). Essa informação não existe nos padrões PDF / PAdES / CMS / X.509.
 
 ---
 
@@ -178,6 +181,20 @@ $assinatura = $extractor->extract('signed.pdf');
 echo $assinatura->signerName;
 echo $assinatura->cpf;
 echo $assinatura->issuer;
+// Preferencialmente usa SigningTime; caso não exista, usa notBefore do certificado
+echo $assinatura->signedAt->format('c');
+// Acesso opcional ao SigningTime original (DateTimeImmutable|null)
+// $assinatura->signingDateTime
+// Cadeia de certificados em PEM
+foreach ($assinatura->certificates as $pem) {
+  // ...
+}
+
+// Para múltiplas assinaturas no mesmo PDF
+$todas = $extractor->extractAll('signed.pdf');
+foreach ($todas as $sig) {
+  // processa cada assinatura
+}
 ```
 
 ---
