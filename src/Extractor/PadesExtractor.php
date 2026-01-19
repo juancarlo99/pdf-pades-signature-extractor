@@ -39,7 +39,9 @@ class PadesExtractor
         $dto->validFrom  = $x509->getValidFrom();
         $dto->validTo    = $x509->getValidTo();
         $dto->signingDateTime = $signingTime; // pode ser null
-        $dto->signedAt   = $signingTime ? \DateTime::createFromImmutable($signingTime) : $dto->validFrom; // fallback técnico
+        $dto->signedAt   = $signingTime
+            ? \DateTime::createFromImmutable($signingTime)
+            : $dto->validFrom; // fallback técnico
         $dto->certificates = $certificates;
 
         return $dto;
@@ -80,7 +82,9 @@ class PadesExtractor
             $dto->validFrom  = $x509->getValidFrom();
             $dto->validTo    = $x509->getValidTo();
             $dto->signingDateTime = $signingTime;
-            $dto->signedAt   = $signingTime ? \DateTime::createFromImmutable($signingTime) : $dto->validFrom;
+            $dto->signedAt   = $signingTime
+                ? \DateTime::createFromImmutable($signingTime)
+                : $dto->validFrom;
             $dto->certificates = $certificates;
 
             $out[] = $dto;
