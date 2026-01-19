@@ -213,7 +213,7 @@ class Pkcs7SignerInfoExtractor
         // With offset
         if ($len >= 14) {
             $offset = substr($str, -5);
-            if ($offset !== false && ($offset[0] === '+' || $offset[0] === '-') ) {
+            if ($offset !== false && ($offset[0] === '+' || $offset[0] === '-')) {
                 $digits = substr($str, 0, $len - 5);
                 if ($digits === false) {
                     return null;
@@ -261,7 +261,7 @@ class Pkcs7SignerInfoExtractor
         }
         // With offset
         $offset = substr($main, -5);
-        if ($offset !== false && ($offset[0] === '+' || $offset[0] === '-') ) {
+        if ($offset !== false && ($offset[0] === '+' || $offset[0] === '-')) {
             $digits = substr($main, 0, strlen($main) - 5);
             if ($digits === false || strlen($digits) !== 14) {
                 return null;
